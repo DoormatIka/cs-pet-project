@@ -134,7 +134,7 @@ class Properties
 	}
 }
 
-enum Result { Success, Failure }
+public enum Result { Success, Failure }
 interface IPetBehaviour
 {
 	public Result Eat(Food food);
