@@ -5,9 +5,11 @@ class Prog
 {
 	static public void Main() {
 		Dictionary<string, Properties> food_list = new Dictionary<string, Properties>() {
-			{ "watermelon", new Properties(name: "watermelon", food_value: 20, price: 40) },
-			{ "bread", new Properties(name: "bread", food_value: 40, price: 80) },
+			{ "watermelon", new Properties(name: "watermelon", food_value: 20, price: 10) },
+			{ "bread", new Properties(name: "bread", food_value: 40, price: 20) },
 		};
+		JobMarket job = new JobMarket()
+			.AddJobItem(new JobItem("mc", 20));
 
 		Shop shop = new Shop();
 		foreach (var (name, pro) in food_list)
@@ -56,12 +58,16 @@ class Prog
 					}
 					break;
 				case "shop":
-					Dictionary<string, Item> bought_items = shop.ActivateShop(ref pet.money);
-					foreach (var (name, item) in bought_items)
+					List<Item> bought_items = shop.ActivateShop(ref pet.money);
+					foreach (var item in bought_items)
 					{
-						Food food = new Food(name: item.Name, value: food_list[name].food_value, quantity: item.Quantity);
+						Food food = new Food(name: item.Name, value: food_list[item.Name].food_value, quantity: item.Quantity);
 						data.AddFoodItem(food);
 					}
+					Console.Clear();
+					break;
+				case "work":
+					job.ActivateJob(ref pet.money, ref data.actions_per_day);
 					Console.Clear();
 					break;
 				case "rest":
@@ -75,7 +81,7 @@ class Prog
 
 	static void Instructions()
 	{
-		Console.WriteLine("Pet commands: feed [food item], rest, shop");
+		Console.WriteLine("Pet commands: feed [food item], rest, shop, work");
 	}
 
 	static public Input? GetInput()
@@ -118,7 +124,6 @@ class Input
 		this.value = value;
 	}
 }
-
 
 class Properties
 {

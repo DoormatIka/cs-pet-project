@@ -2,7 +2,10 @@
 
 namespace Game
 {
-	public class Item // interfaces with fields.
+	/**
+	 * Represents all items.
+	 */
+	public class Item
 	{
 		protected string name = "";
 		protected int quantity = 0;

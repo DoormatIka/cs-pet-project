@@ -5,7 +5,7 @@ namespace Game
 	public class GameData
 	{
 		private int days;
-		private int actions_per_day;
+		public int actions_per_day;
 		private Dictionary<string, Food> foods = new Dictionary<string, Food>();
 
 		public GameData()

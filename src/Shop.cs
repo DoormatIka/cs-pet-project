@@ -32,7 +32,7 @@ namespace Game
 		{
 			Console.WriteLine("Shop commands: buy [name], exit");
 		}
-		public Dictionary<string, Item> ActivateShop(ref int money)
+		public List<Item> ActivateShop(ref int money)
 		{
 			while (true)
 			{
@@ -45,7 +45,9 @@ namespace Game
 				switch (input?.Operator)
 				{
 					case "exit":
-						return this.bought_items;
+						List<Item> list_items = this.bought_items.Values.ToList();
+						this.bought_items.Clear();
+						return list_items;
 					case "buy":
 						if (input.Value == null)
 						{
@@ -65,7 +67,7 @@ namespace Game
 										// assuming bought_item is a reference.
 										bought_item.Quantity += 1;
 										money -= item.Price;
-									} 
+									}
 									else 
 									{
 										Item bought = new Item();
@@ -80,7 +82,7 @@ namespace Game
 								case Result.Failure:
 									Console.WriteLine($"\nCannot buy {item.Name}!");
 									break;
-							} 
+							}
 						}
 						break;
 					case null:
@@ -90,6 +92,4 @@ namespace Game
 			}
 		}
 	}
-
 }
-
