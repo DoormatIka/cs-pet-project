@@ -38,40 +38,46 @@ namespace Game
 					case "exit":
 						return;
 					case "work":
-						if (input.Value == null)
-						{
-							break;
-						}
-						if (this.jobs.TryGetValue(input.Value, out JobItem? job))
-						{
-							while (true)
-							{
-								Console.WriteLine(
-									$"Actions used must be less than {user_actions}. " + 
-									"\"cancel\" to cancel this. "
-								);
-								string? action_selected = Console.ReadLine();
-								if (Int32.TryParse(action_selected, out int a))
-								{
-									a = Math.Max(0, a);
-									if (user_actions > a)
-									{
-										money += job.MoneyPerAction * a;
-										user_actions = user_actions - a;
-										break;
-									}
-								}
-								if (action_selected == "cancel")
-								{
-									Console.WriteLine("Cancelled.");
-									break;
-								}
-							}
-						}
-						break;
+						Work(input, ref money, ref user_actions);
+						return;
 				}
 			}
 		}
+		private void Work(Input? input, ref int money, ref int user_actions)
+		{
+			if (input?.Value == null || !this.jobs.TryGetValue(input.Value, out JobItem? job))
+			{
+				return;
+			}
+			while (true)
+			{
+				Console.WriteLine(
+					$"Actions used must be less than {user_actions}. " +
+					"\"cancel\" to cancel this. "
+				);
+				string? action_selected = Console.ReadLine();
+				if (Int32.TryParse(action_selected, out int a))
+				{
+					a = Math.Max(0, a);
+					if (user_actions > a)
+					{
+						money += job.MoneyPerAction * a;
+						user_actions = user_actions - a;
+						break;
+					}
+				}
+				if (action_selected == "cancel")
+				{
+					Console.WriteLine("Cancelled.");
+					break;
+				}
+			}
+
+		}
+
+
+
+
 	}
 	public class JobItem
 	{

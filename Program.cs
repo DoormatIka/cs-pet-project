@@ -19,7 +19,7 @@ class Prog
 		GameData data = new GameData();
 		Pet pet = new Pet(name: "Allice", money: 100);
 
-		Console.Clear();
+		Console.Write("\u001b[2J\u001b[0;0H");
 		while (true)
 		{
 			Console.WriteLine();
@@ -64,11 +64,11 @@ class Prog
 						Food food = new Food(name: item.Name, value: food_list[item.Name].food_value, quantity: item.Quantity);
 						data.AddFoodItem(food);
 					}
-					Console.Clear();
+					Console.Write("\u001b[2J\u001b[0;0H");
 					break;
 				case "work":
 					job.ActivateJob(ref pet.money, ref data.actions_per_day);
-					Console.Clear();
+					Console.Write("\u001b[2J\u001b[0;0H");
 					break;
 				case "rest":
 					pet.Rest();
@@ -90,7 +90,7 @@ class Prog
 		string? input = Console.ReadLine();
 		Console.WriteLine();
 
-		Console.Clear();
+		Console.Write("\u001b[2J\u001b[0;0H");
 
 		if (input != null)
 		{

@@ -3,8 +3,8 @@ namespace Game
 {
 	public class Shop
 	{
-		Dictionary<string, ShopItem> items = new Dictionary<string, ShopItem>();
-		Dictionary<string, Item> bought_items = new Dictionary<string, Item>();
+		Dictionary<string, ShopItem> items = new();
+		Dictionary<string, Item> bought_items = new();
 
 		public Shop AddFoodItem(ShopItem item)
 		{
@@ -17,7 +17,7 @@ namespace Game
 			foreach (var (name, item) in this.items)
 			{
 				Item? bought_item;
-				if (this.bought_items.TryGetValue(name, out bought_item)) 
+				if (this.bought_items.TryGetValue(name, out bought_item))
 				{
 					Console.WriteLine($"- {name} ${item.Price} | Bought {bought_item.Quantity} items");
 				}
@@ -49,41 +49,7 @@ namespace Game
 						this.bought_items.Clear();
 						return list_items;
 					case "buy":
-						if (input.Value == null)
-						{
-							break;
-						}
-						ShopItem? item;
-						Item? bought_item;
-
-						if (this.items.TryGetValue(input.Value, out item))
-						{
-							Result res = item.buy(money: money);
-							switch (res)
-							{
-								case Result.Success:
-									if (this.bought_items.TryGetValue(input.Value, out bought_item))
-									{
-										// assuming bought_item is a reference.
-										bought_item.Quantity += 1;
-										money -= item.Price;
-									}
-									else 
-									{
-										Item bought = new Item();
-										bought.Name = item.Name;
-										bought.Quantity = 1;
-										money -= item.Price;
-										this.bought_items[input.Value] = bought;
-									}
-									// assuming everything is a food item.
-									Console.WriteLine($"\nBought {item.Name}");
-									break;
-								case Result.Failure:
-									Console.WriteLine($"\nCannot buy {item.Name}!");
-									break;
-							}
-						}
+						BuyItem(input, ref money);
 						break;
 					case null:
 					default:
@@ -91,5 +57,48 @@ namespace Game
 				}
 			}
 		}
+		private void BuyItem(Input? input, ref int money)
+		{
+			if (input?.Value == null)
+			{
+				return;
+			}
+
+			ShopItem? item;
+			Item? bought_item;
+
+			if (this.items.TryGetValue(input.Value, out item) && item.buy(money: money) == Result.Success)
+			{
+				money -= item.Price;
+
+				if (this.bought_items.TryGetValue(input.Value, out bought_item))
+				{
+					// assuming bought_item is a reference.
+					bought_item.Quantity += 1;
+
+				}
+				else
+				{
+					Item bought = new Item
+					{
+						Name = item.Name,
+						Quantity = 1
+					};
+
+					this.bought_items[input.Value] = bought;
+				}
+				// assuming everything is a food item.
+				Console.WriteLine($"\nBought {item.Name}");
+
+			}
+			else
+			{
+				Console.WriteLine($"\nCannot buy {item.Name}!");
+			}
+		}
+
+
+
+
 	}
 }
