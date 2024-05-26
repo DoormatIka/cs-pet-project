@@ -38,7 +38,7 @@ namespace Game
 					case "exit":
 						return;
 					case "work":
-						Work(input, ref money, ref user_actions);
+						this.Work(input, ref money, ref user_actions);
 						return;
 				}
 			}

@@ -49,7 +49,7 @@ namespace Game
 						this.bought_items.Clear();
 						return list_items;
 					case "buy":
-						BuyItem(input, ref money);
+						this.BuyItem(input, ref money);
 						break;
 					case null:
 					default:
@@ -93,11 +93,10 @@ namespace Game
 			}
 			else
 			{
-				Console.WriteLine($"\nCannot buy {item.Name}!");
+				string name = item != null ? item.Name : input.Value;
+				Console.WriteLine($"\nCannot buy \"{name}\"!");
 			}
 		}
-
-
 
 
 	}

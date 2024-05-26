@@ -20,7 +20,18 @@ class Prog
 		Pet pet = new Pet(name: "Allice", money: 100);
 
 		Console.Write("\u001b[2J\u001b[0;0H");
-		while (true)
+
+		Dictionary<Symbol, int> dict = new();
+		dict.Add(Symbol.One, 22);
+		dict.Add(Symbol.Two, 11);
+		dict.Add(Symbol.Three, 9);
+		dict.Add(Symbol.Seven, 8);
+		dict.Add(Symbol.Jackpot, 6);
+		dict.Add(Symbol.Cherry, 8);
+		SlotMachine slots = new SlotMachine(symbols: dict);
+		slots.BuildReels();
+
+		while (false)
 		{
 			Console.WriteLine();
 			data.Status();
