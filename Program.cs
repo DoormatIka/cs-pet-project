@@ -1,8 +1,10 @@
 ﻿
 using Game;
 
+
 class Prog
 {
+
 	static public void Main() {
 		Dictionary<string, Properties> food_list = new Dictionary<string, Properties>() {
 			{ "watermelon", new Properties(name: "watermelon", food_value: 20, price: 10) },
@@ -21,17 +23,27 @@ class Prog
 
 		Console.Write("\u001b[2J\u001b[0;0H");
 
-		Dictionary<Symbol, int> dict = new();
-		dict.Add(Symbol.One, 22);
-		dict.Add(Symbol.Two, 11);
-		dict.Add(Symbol.Three, 9);
-		dict.Add(Symbol.Seven, 8);
-		dict.Add(Symbol.Jackpot, 6);
-		dict.Add(Symbol.Cherry, 8);
-		SlotMachine slots = new SlotMachine(symbols: dict);
+		Dictionary<Symbol, int> dict = new Dictionary<Symbol, int>() {
+			{ Symbol.Jackpot, 6 },
+			{ Symbol.Seven, 8 },
+			{ Symbol.Three, 9 },
+			{ Symbol.Two, 11 },
+			{ Symbol.One, 22 },
+			{ Symbol.Cherry, 8 }
+		};
+		Dictionary<Symbol, int> winning_triplets = new Dictionary<Symbol, int>() {
+			{ Symbol.Jackpot, 1199 },
+			{ Symbol.Seven, 200 },
+			{ Symbol.Three, 100 },
+			{ Symbol.Two, 90 },
+			{ Symbol.One, 40 },
+			{ Symbol.Cherry, 40 },
+		};
+		SlotMachine slots = new SlotMachine(symbols: dict, winning: winning_triplets);
 		slots.BuildReels();
 
-		while (false)
+
+		while (true)
 		{
 			Console.WriteLine();
 			data.Status();
@@ -45,6 +57,7 @@ class Prog
 			{
 				continue;
 			}
+			Console.Write("\u001b[2J\u001b[0;0H");
 
 			if (input.Operator != "rest" && !data.HasActions())
 			{
@@ -75,24 +88,37 @@ class Prog
 						Food food = new Food(name: item.Name, value: food_list[item.Name].food_value, quantity: item.Quantity);
 						data.AddFoodItem(food);
 					}
-					Console.Write("\u001b[2J\u001b[0;0H");
 					break;
 				case "work":
 					job.ActivateJob(ref pet.money, ref data.actions_per_day);
-					Console.Write("\u001b[2J\u001b[0;0H");
+					break;
+				case "slots":
+					if (pet.money - 20 <= 0)
+					{
+						Console.WriteLine("Come back when you have more money!");
+					}
+					else
+					{
+						pet.money -= 10;
+						Symbol[] slot_results = slots.Spin();
+						Console.WriteLine("\n");
+						slots.PrintReel(slot_results);
+						int wins = slots.CalculateWins(slot_results);
+						Console.WriteLine($"wins: {wins}");
+						pet.money += wins * 15;
+					}
 					break;
 				case "rest":
 					pet.Rest();
 					data.AdvanceNextDay();
 					break;
 			}
-			Console.WriteLine();
 		}
 	}
 
 	static void Instructions()
 	{
-		Console.WriteLine("Pet commands: feed [food item], rest, shop, work");
+		Console.WriteLine("Pet commands: feed [food item], rest, shop, work, slots");
 	}
 
 	static public Input? GetInput()
